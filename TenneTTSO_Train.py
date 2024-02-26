@@ -1,6 +1,6 @@
 # Código para entrenar modelo de inteligencia artificial con Keras y TensorFlow,
 # utilizando una red neuronal recurrente (RNN) con keras. La variable objetivo Potencia 
-# promedio (TWh) generada por los parques aerogeneradores de la operadora (TSO) Alemana 50Hertz 
+# promedio (TWh) generada por los parques aerogeneradores de la operadora (TSO) Alemana TenneTTSO
 # a nivel nacional, calculada por Fecha/Date o diaria desde las 00:00:00 hrs hasta las 23:45:00 hrs
 # con registros/intervalos cada 15 minutos, en un periodo de tiempo desde el 23/08/2019 al 22/09/2020,
 # por lo tanto, para cada fila, estas columnas son las variables dependientes que se desea predecir.
@@ -21,7 +21,7 @@ import joblib
 import time
 
 
-data_path = '/home/valiente/aiValentin/windPower/50Hertz (copy).csv'
+data_path = '/home/valiente/aiValentin/WindPowerGenrOperAlem/TenneTTSO.csv'
 df = pd.read_csv(data_path, dayfirst=True)  # Agregar dayfirst=True para el formato de fecha
 required_columns = ['Date'] + [f'{i:02d}:00:00' for i in range(24)]
 missing_columns = set(required_columns) - set(df.columns)
@@ -64,7 +64,7 @@ results['Predicho'] = results['Predicho'].apply(lambda x: f'{x:.2f}')
 results['Diferencia Absoluta'] = results['Diferencia Absoluta'].apply(lambda x: f'{x:.2f}')
 
 # Imprimir la tabla de resultados
-#print("\nTabla de resultados - Potencia promedio global nacional por fecha en Teravatios (TWh)- Operadora 50Hertz:")
+#print("\nTabla de resultados - Potencia promedio global nacional Real y Predicho por fecha en Teravatios (TWh)- Operadora TenneTTSO:")
 #print(tabulate(results, headers='keys', tablefmt='pretty', showindex=False))
 
 # Calcular potencias promedio por fecha e intervalos de 15 minutos, desde 00:00:00 hrs hasta 23:45:00 hrs.
@@ -77,14 +77,14 @@ results_promedio = results_promedio.drop_duplicates().reset_index(drop=True)
 results_promedio['Real_Promedio'] = results_promedio['Real_Promedio'].apply(lambda x: f'{x:.2f}')
 results_promedio['Predicho_Promedio'] = results_promedio['Predicho_Promedio'].apply(lambda x: f'{x:.2f}')
 results_promedio['Diferencia_Absoluta_Promedio'] = results_promedio['Diferencia_Absoluta_Promedio'].apply(lambda x: f'{x:.2f}')
-print("\nTabla de resultados - Potencia Promedio Global Nacional por fecha en Teravatios (TWh)- Operadora Alemana 50Hertz:")
+print("\nTabla de resultados - Potencia Promedio Global Nacional por fecha en Teravatios (TWh)- Operadora Alemana TenneTTSO:")
 print(tabulate(results_promedio, headers='keys', tablefmt='pretty', showindex=False))
 
 # Graficar resultados
 plt.figure(figsize=(12, 6))
 plt.plot(y_test.index, y_test, label='Reales', marker='o')
 plt.plot(y_test.index, predictions, label='Predichos', marker='o')
-plt.title('Potencia Promedio Global Nacional por Fecha en Teravatios (TWh): Reales Vs Predichos - Operadora Alemana 50Hertz')
+plt.title('Potencia Promedio Global Nacional por Fecha en Teravatios (TWh): Reales Vs Predichos - Operadora Alemana TenneTTSO')
 plt.xlabel('Indice de Fila o Fecha: periodo 23/08/2019 al 22/09/2020 - Intervalos diarios cada 15 minutos')
 plt.ylabel('Potencia promedio por fecha (TWh)')
 plt.legend()
@@ -106,14 +106,14 @@ print("Después de mostrar la tabla de resultados")
 # Grafico de dispersión
 plt.figure(figsize=(8, 8))
 plt.scatter(y_test, predictions)
-plt.title('Grafico de dispersión: Potencia Promedio Global Nacional por fecha en Teravatios (TWh): Reales Vs Predichos - Operadora Alemana 50Hertz')
+plt.title('Grafico de dispersión: Potencias Promedio Global Nacional por Fecha Reales Vs Predichos (TWh) - Operadora Alemana TenneTTSO')
 plt.xlabel('Reales')
 plt.ylabel('Predichos')
 plt.show()
 
 
 # Guardar el modelo entrenado
-model_path = '/home/valiente/aiValentin/windPower/50Hertz_Modelo_entrenado.pkl'
+model_path = '/home/valiente/aiValentin/WindPowerGenrOperAlem/TenneTTSO_Modelo_entrenado.pkl'
 joblib.dump(model, model_path)
 print(f"Modelo guardado en: {model_path}")
 
