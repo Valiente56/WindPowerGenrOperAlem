@@ -106,9 +106,9 @@ print("Después de mostrar la tabla de resultados")
 # Grafico de dispersión
 plt.figure(figsize=(8, 8))
 plt.scatter(y_test, predictions)
-plt.title('Grafico de dispersión: Potencias Promedio Global Nacional por Fecha Reales Vs Predichos (TWh) - Operadora Alemana TenneTTSO')
-plt.xlabel('Reales')
-plt.ylabel('Predichos')
+plt.title('Grafico de dispersión: Potencias Promedio Global Nacional por Fecha Real Vs Predicha (TWh) - Operadora Alemana TenneTTSO')
+plt.xlabel('Potencia Promedio Real')
+plt.ylabel('Potencia Promedio Predicha')
 plt.show()
 
 
