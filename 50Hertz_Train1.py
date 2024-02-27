@@ -18,6 +18,7 @@ from tabulate import tabulate
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import time
+import os
 
 data_path = '/home/valiente/aiValentin/windPower/50Hertz (copy).csv'
 df = pd.read_csv(data_path, dayfirst=True)
@@ -122,6 +123,11 @@ plt.show()
 
 # Guardar el modelo entrenado en formato TensorFlow JS
 tfjs_path = '/home/valiente/aiValentin/windPower/50Hertz_Modelo_entrenado'
+
+# Verificar si la carpeta existe, si no, crearla
+if not os.path.exists(tfjs_path):
+    os.makedirs(tfjs_path)
+
 tf.saved_model.save(model, tfjs_path)
 print(f"Modelo guardado en formato TensorFlow JS en la carpeta: {tfjs_path}")
 
