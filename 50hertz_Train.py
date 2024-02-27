@@ -39,20 +39,25 @@ y = df['00:00:00']  # Seleccionar la columna de la hora que desees para 'Real'
 # Dividir el conjunto de datos en entrenamiento y prueba
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Inicializar el modelo de regresión RandomForest
+# Inicializar el modelo de regresión RandomForest, el cual es un tipo de modelo basado en
+# el algoritmo de Bosques Aleatorios (Random Forest), utilizado para el aprendizaje automático,
+# tanto en problemos de Regresión como de Clasificación.
+
 model = RandomForestRegressor(random_state=42)
 
 print("Antes de entrenar el modelo")
 
-# Entrenar el modelo
+# Entrenar el Modelo de Regresión lineal Multiple, con varias variables independientes.
 model.fit(X_train, y_train)
 
 print("Después de entrenar el modelo")
 
-# Realizar predicciones en el conjunto de prueba
+# Realizar predicciones en el conjunto de prueba aplicando el Modelo de Regresión lineal Múltiple.  
 predictions = model.predict(X_test)
 
-# Calcular el error cuadrático medio (MSE)
+# Calcular el error cuadrático medio (Mean Squared Error - MSE) entre las medias, para evaluar la  
+# calidad de un modelo de regresión, mientras más bajo, mejor su desempeño, no existe un valor standarde comparación.
+
 mse_promedio = mean_squared_error(y, model.predict(X))
 print(f"\nError cuadrático medio para potencias promedio por fecha: {mse_promedio:.2f}")
 
@@ -106,13 +111,15 @@ print("Después de mostrar la tabla de resultados")
 # Grafico de dispersión
 plt.figure(figsize=(8, 8))
 plt.scatter(y_test, predictions)
-plt.title('Grafico de dispersión: Potencia Promedio Global Nacional por fecha en Teravatios (TWh): Reales Vs Predichos - Operadora Alemana 50Hertz')
-plt.xlabel('Reales')
-plt.ylabel('Predichos')
+plt.title('Grafico de dispersión: Potencia Promedio Global Nacional por fecha en Teravatios (TWh): Real Vs Predicha - Operadora Alemana 50Hertz')
+plt.xlabel('Potencia Promedio Real')
+plt.ylabel('Potencia promedio Predicha')
 plt.show()
 
+# Guardar el modelo entrenado en un archivo con extensión ".pkl", es decir en formato "pickle", que  
+# es un formato de serialización de Python y utiliza la función 'joblib.dump' para almacenar objetos 
+# Python de manera más eficiente.
 
-# Guardar el modelo entrenado
 model_path = '/home/valiente/aiValentin/windPower/50Hertz_Modelo_entrenado.pkl'
 joblib.dump(model, model_path)
 print(f"Modelo guardado en: {model_path}")

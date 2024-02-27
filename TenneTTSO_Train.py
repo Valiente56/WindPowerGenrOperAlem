@@ -44,15 +44,17 @@ model = RandomForestRegressor(random_state=42)
 
 print("Antes de entrenar el modelo")
 
-# Entrenar el modelo
+# Entrenar el Modelo de Regresión lineal Multiple, con varias variables independientes.
 model.fit(X_train, y_train)
 
 print("Después de entrenar el modelo")
 
-# Realizar predicciones en el conjunto de prueba
+# Realizar predicciones en el conjunto de prueba aplicando el Modelo de Regresión lineal Múltiple.  
 predictions = model.predict(X_test)
 
-# Calcular el error cuadrático medio (MSE)
+# Calcular el error cuadrático medio (Mean Squared Error - MSE) entre las medias, para evaluar la  
+# calidad de un modelo de regresión, mientras más bajo, mejor su desempeño, no existe un valor standarde comparación.
+
 mse_promedio = mean_squared_error(y, model.predict(X))
 print(f"\nError cuadrático medio para potencias promedio por fecha: {mse_promedio:.2f}")
 
@@ -111,8 +113,10 @@ plt.xlabel('Potencia Promedio Real')
 plt.ylabel('Potencia Promedio Predicha')
 plt.show()
 
+# Guardar el modelo entrenado en un archivo con extensión ".pkl", es decir en formato "pickle", que  
+# es un formato de serialización de Python y utiliza la función 'joblib.dump' para almacenar objetos 
+# Python de manera más eficiente.
 
-# Guardar el modelo entrenado
 model_path = '/home/valiente/aiValentin/WindPowerGenrOperAlem/TenneTTSO_Modelo_entrenado.pkl'
 joblib.dump(model, model_path)
 print(f"Modelo guardado en: {model_path}")

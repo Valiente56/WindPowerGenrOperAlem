@@ -125,8 +125,11 @@ plt.show()
 tfjs_path = '/home/valiente/aiValentin/windPower/50Hertz_Modelo_entrenado'
 
 # Verificar si la carpeta existe, si no, crearla
-if not os.path.exists(tfjs_path):
+if os.path.exists(tfjs_path):
+    print(f"La carpeta {tfjs_path} ya existe.")
+else:
     os.makedirs(tfjs_path)
+    print(f"Carpeta {tfjs_path} creada.")
 
 tf.saved_model.save(model, tfjs_path)
 print(f"Modelo guardado en formato TensorFlow JS en la carpeta: {tfjs_path}")
