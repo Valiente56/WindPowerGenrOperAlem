@@ -17,6 +17,7 @@ from sklearn.metrics import mean_squared_error
 from tabulate import tabulate
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import tensorflowjs as tfjs
 import time
 import os
 
@@ -63,8 +64,10 @@ print("Después de entrenar el modelo")
 # Realizar predicciones en el conjunto de prueba aplicando el Modelo de Regresión lineal Múltiple.
 predictions = model.predict(X_test).flatten()
 
-# Calcular el error cuadrático medio (Mean Squared Error - MSE) entre las medias, para evaluar la  
-# calidad de un modelo de regresión, mientras más bajo, mejor su desempeño, no existe un valor standarde comparación.
+# Calcular el error cuadrático medio (Mean Squared Error - MSE) entre las medias, métrica que aplica  
+# a este tipo de modelo, para evaluar su rendimiento, mientras más bajo, mejor su desempeño, no existe
+# un valor estandar de comparación. La métrica "Accuracy / Precisión" aplica en la clasificación
+# de datos en Categorías.
 mse_promedio = mean_squared_error(y, model.predict(X).flatten())
 print(f"\nError cuadrático medio para potencias promedio por fecha: {mse_promedio:.2f}")
 
@@ -86,53 +89,19 @@ results_promedio = results_promedio.drop_duplicates().reset_index(drop=True)
 results_promedio['Real_Promedio'] = results_promedio['Real_Promedio'].apply(lambda x: f'{x:.2f}')
 results_promedio['Predicho_Promedio'] = results_promedio['Predicho_Promedio'].apply(lambda x: f'{x:.2f}')
 results_promedio['Diferencia_Absoluta_Promedio'] = results_promedio['Diferencia_Absoluta_Promedio'].apply(lambda x: f'{x:.2f}')
-print("\nTabla de resultados - Potencia Promedio Global Nacional por fecha en Teravatios (TWh)- Operadora Alemana 50Hertz:")
-print(tabulate(results_promedio, headers='keys', tablefmt='pretty', showindex=False))
+# print("\nTabla de resultados - Potencia Promedio Global Nacional por fecha en Teravatios (TWh)- Operadora Alemana 50Hertz:")
+# print(tabulate(results_promedio, headers='keys', tablefmt='pretty', showindex=False))
 
-# Graficar resultados
-plt.figure(figsize=(12, 6))
-plt.plot(y_test.index, y_test, label='Reales', marker='o')
-plt.plot(y_test.index, predictions, label='Predichos', marker='o')
-plt.title('Potencia Promedio Global Nacional por Fecha en Teravatios (TWh): Reales Vs Predichos - Operadora Alemana 50Hertz')
-plt.xlabel('Indice de Fila o Fecha: periodo 23/08/2019 al 22/09/2020 - Intervalos diarios cada 15 minutos')
-plt.ylabel('Potencia promedio por fecha (TWh)')
-plt.legend()
-plt.show()
+# Evaluar el modelo
+test_loss= model.evaluate(X_test, y_test)
+print(f"Pérdida en el conjunto de prueba: {test_loss}")
 
-# Mostrar la tabla de resultados en el gráfico
-print("Antes de mostrar la tabla de resultados")
-fig, ax = plt.subplots(figsize=(12, 6))
-ax.axis('tight')
-ax.axis('off')
-ax.table(cellText=results_promedio.values, colLabels=results_promedio.columns, cellLoc='center', loc='center')
-plt.show()
-print("Después de mostrar la tabla de resultados")
-
-# Mostrar información adicional para verificar el flujo del script
-print("Después de mostrar la tabla de resultados")
-
-# Grafico de dispersión
-plt.figure(figsize=(8, 8))
-plt.scatter(y_test, predictions)
-plt.title('Grafico de dispersión: Potencia Promedio Global Nacional por fecha en Teravatios (TWh): Real Vs Predicha - Operadora Alemana 50Hertz')
-plt.xlabel('Potencia Promedio Real')
-plt.ylabel('Potencia promedio Predicha')
-plt.show()
-
-# Guardar el modelo entrenado directamente en formato TensorFlow JS en una carpeta interna con dos
-# archivos: Uno con extensión ".bin" y otro con ".json".
-tfjs_path = '/home/valiente/aiValentin/windPower/50Hertz_Modelo_entrenado'
-
-# Verificar si la carpeta existe, si no, crearla
-if os.path.exists(tfjs_path):
-    print(f"La carpeta {tfjs_path} ya existe.")
-else:
-    os.makedirs(tfjs_path)
-    print(f"Carpeta {tfjs_path} creada.")
-
-tf.saved_model.save(model, tfjs_path)
-print(f"Modelo guardado en formato TensorFlow JS en la carpeta: {tfjs_path}")
-
+# Guardar el modelo entrenado en Formato TensorFlow.js en la carpeta "5oHertz_Modelo_entrenado" 
+# con dos archivos: Uno con extensión ".bin" y otro con ".json".
+tfjs_target_dir = "/home/valiente/aiValentin/WindPowerGenrOperAlem/5oHertz_Modelo_entrenado"
+tfjs.converters.save_keras_model(model, tfjs_target_dir)
+print(f"Modelo guardado en formato TensorFlow.js en la carpeta: {tfjs_target_dir}")
+ 
 # Imprimir mensaje final
 print("Fin del script")
 
